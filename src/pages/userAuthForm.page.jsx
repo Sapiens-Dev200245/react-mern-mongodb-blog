@@ -30,7 +30,7 @@ const UserAuthForm = ({ type }) => {
       }
 
       const rs = await axios.post(
-        `https://react-mern-blog-api.onrender.com${serverRoute}`,formData
+        `http://localhost:3000${serverRoute}`,formData
       );
       
       StoreInSession("user" ,JSON.stringify(rs.data));
@@ -52,7 +52,8 @@ const UserAuthForm = ({ type }) => {
         access_token : user.accessToken
       }
       console.log(formData)
-      const rs = await axios.post('https://react-mern-blog-api.onrender.com' + serverRoute , 
+      // https://react-mern-blog-api.onrender.com
+      const rs = await axios.post('http://localhost:3000' + serverRoute , 
         formData
       )
       StoreInSession("user" ,JSON.stringify(rs.data));

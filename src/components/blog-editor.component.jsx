@@ -9,20 +9,26 @@ import { FiCloudLightning } from "react-icons/fi";
 import { EditorContext } from "../pages/editor.pages";
 import EditorJS from '@editorjs/editorjs'
 import { tools } from "./tools.component";
-
+import { UserContext } from "../App";
+import {useNavigate} from 'react-router-dom'
 const BlogEditor = () => {
+    let navigate = useNavigate()
     const [img, setImg] = useState(null); // สร้าง state เพื่อเก็บรูปภาพ
     const [imgReview, setImgReview] = useState(null); // สร้าง state เพื่อเก็บ URL ของรูปภาพที่ต้องการแสดงตัวอย่าง
     let {blog,setBlog,textEditor , setTextEditor , setEditorState} = useContext(EditorContext);
+    let {userAuth} = useContext(UserContext);
     console.log(blog)
 
     useEffect(() => {
-        setTextEditor(new EditorJS({
-            holderId:"textEditor",
-            data:blog?.content,
-            tools:tools,
-            placeholder:"Let's write an awesome story..."
-        }))
+        if(!textEditor.isReady){
+            setTextEditor(new EditorJS({
+                holderId:"textEditor",
+                data:blog?.content,
+                tools:tools,
+                placeholder:"Let's write an awesome story..."
+            }))
+        }
+
     },[])
 
     const handleBannerUpload = async (e) => {
@@ -113,6 +119,51 @@ const BlogEditor = () => {
             })
         }
     }
+    const handleSaveDraft = async(ev) => {
+        ev.preventDefault();
+        ev.preventDefault();
+        if(ev.target.className.includes("disable")){
+            return 
+        }
+        if(!blog?.title.length){
+            return toast.error('Write blog tittle before save draft');
+        }
+
+        let loadingToast = toast.loading("Saving Draft....")
+        ev.target.classList.add('disable');
+
+        if(textEditor.isReady){
+            textEditor.save()
+                let blogObj = {
+                    title : blog?.title,
+                    banner : blog?.banner,
+                    des : blog?.des,
+                    content:blog?.content,
+                    tags : blog?.tags,
+                    draft:true
+                }
+                try {
+                    const res = await axios.post('http://localhost:3000' + '/create-blog',blogObj , {
+                        headers:{
+                            'Authorization' : `Bearer ${userAuth?.access_token}`
+                        }
+                    })
+                    ev.target.classList.remove('disable');
+                    toast.dismiss(loadingToast);
+                    toast.success("Saved 👍");
+                    console.log(res)
+                    setTimeout(() => {
+                        navigate("/");
+                    }, 500);
+                } catch (error) {
+                    ev.target.classList.remove('disable');
+                    toast.dismiss(loadingToast);
+                    toast.error("Fail to publish");
+                    console.log(error);
+                }
+            }
+        }
+    
 
     return (
         <>
@@ -133,7 +184,10 @@ const BlogEditor = () => {
                     >
                         Publish
                     </button>
-                    <button className="btn-light py-2">
+                    <button 
+                    className="btn-light py-2"
+                    onClick={handleSaveDraft}
+                    >
                         Save Draft
                     </button>
                 </div>
