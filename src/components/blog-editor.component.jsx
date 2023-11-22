@@ -93,25 +93,25 @@ const BlogEditor = () => {
     };
 
     const handlePublishEvent = () => {
-        // if(!blog?.banner.length){
-        //     return toast.error("Upload a blog benner to publish");
-        // }
-        // if(!blog?.title.length){
-        //     return toast.error("Write title to publish");
-        // }
+        if(!blog?.banner.length){
+            return toast.error("Upload a blog benner to publish");
+        }
+        if(!blog?.title.length){
+            return toast.error("Write title to publish");
+        }
 
-        // if(textEditor.isReady){
+        if(textEditor.isReady){
             textEditor.save().then(data => {
-                // if(data.blocks.length){
+                if(data.blocks.length){
                     setBlog({...blog,content : data});
                     setEditorState("publish");
-                // }else {
-                //     return toast.error("Write something in your blog to publish 👌")
-                // }
+                }else {
+                    return toast.error("Write something in your blog to publish 👌")
+                }
             }).catch(err => {
                 console.log(err);
             })
-        // }
+        }
     }
 
     return (
