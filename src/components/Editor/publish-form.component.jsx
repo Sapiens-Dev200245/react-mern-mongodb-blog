@@ -1,12 +1,12 @@
-import AnimationWrapper from "../common/page-animation";
+import AnimationWrapper from "../../common/page-animation";
 import { IoClose } from "react-icons/io5";
 
 import {toast } from 'react-hot-toast'
 import { useContext } from "react";
-import { EditorContext } from "../pages/editor.pages";
+import { EditorContext } from "../../pages/editor.pages";
 import axios from 'axios';
 import Tag from "./tags.component";
-import { UserContext } from "../App";
+import { UserContext } from "../../App";
 import {useNavigate} from 'react-router-dom';
 
 

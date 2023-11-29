@@ -1,15 +1,14 @@
 import {Link} from "react-router-dom";
-import logo from '../imgs/logo.png'
-import AnimationWrapper from "../common/page-animation";
-import defaultBanner from "../imgs/blog banner.png"
+import logo from '../../imgs/logo.png';
+import defaultBanner from "../../imgs/blog banner.png";
+import AnimationWrapper from "../../common/page-animation";
 import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../App";
+import { EditorContext } from "../../pages/editor.pages";
 import axios from "axios";
 import {toast} from 'react-hot-toast'
-import { FiCloudLightning } from "react-icons/fi";
-import { EditorContext } from "../pages/editor.pages";
 import EditorJS from '@editorjs/editorjs'
 import { tools } from "./tools.component";
-import { UserContext } from "../App";
 import {useNavigate} from 'react-router-dom'
 const BlogEditor = () => {
     let navigate = useNavigate()
@@ -17,8 +16,8 @@ const BlogEditor = () => {
     const [imgReview, setImgReview] = useState(null); // สร้าง state เพื่อเก็บ URL ของรูปภาพที่ต้องการแสดงตัวอย่าง
     let {blog,setBlog,textEditor , setTextEditor , setEditorState} = useContext(EditorContext);
     let {userAuth} = useContext(UserContext);
-    console.log(blog)
 
+    //!  set editorjs ที่ id ของ div Editorjs //set tools สำหรับ editorjs ที่อยู่ tools.jsx
     useEffect(() => {
         if(!textEditor.isReady){
             setTextEditor(new EditorJS({
@@ -38,7 +37,7 @@ const BlogEditor = () => {
       setImgReview(URL.createObjectURL(uploadedImage));
       
       try {
-        //*!ต้องใช้ formData ในการส่งเข้าไปใน cloudinaty เป็นมาฐาน โดยส่ง file upload_preset cloudname เพื่อระบุเส้นทางเข้าไปใน cloudinary
+        //todo : !ต้องใช้ formData ในการส่งเข้าไปใน cloudinaty เป็นมาฐาน โดยส่ง file upload_preset cloudname เพื่อระบุเส้นทางเข้าไปใน cloudinary
         const formData = new FormData();
         formData.append('file', uploadedImage);
         formData.append('upload_preset', 's5jgg5lb');
@@ -50,10 +49,8 @@ const BlogEditor = () => {
           formData
         );
   
-        // จากการตอบกลับของ Cloudinary คุณสามารถเข้าถึง URL ที่อัปโหลดได้
         const imageUrl = res.data.url;
   
-        // ทำอย่างอื่น ๆ ที่คุณต้องการกับ URL ที่ได้
         setBlog({...blog , banner:imageUrl})
         console.log('Uploaded Image URL:', imageUrl);
         toast.dismiss(loadingToaster);
@@ -69,13 +66,13 @@ const BlogEditor = () => {
     const handleUpload = async (e) => {
         e.preventDefault();
         try {
+            //todo : สร้าง FormData เพื่อส่งไปให้ cloundinaty set file , set upload , set clound name 
             const data = new FormData();
             data.append('file', img);
             data.append('upload_preset', 's5jgg5lb');
             data.append('cloud_name' , 'duxi1mfhl')
             const res = await axios.post('https://api.cloudinary.com/v1_1/duxi1mfhl/image/upload',data)
             toast.success("Upload Banner Success");
-            
         } catch (error) {
             console.log(error)
         }
@@ -90,11 +87,10 @@ const BlogEditor = () => {
 
     const handleTitleChange = (e) => {
         let input = e.target;
-      
-        //! ปรับขนาดความสูงของ textarea ตามข้อความที่ผู้ใช้ป้อน
+        //todo : ปรับขนาดความสูงของ textarea ตามข้อความที่ผู้ใช้ป้อน
         input.style.height = 'auto';
         input.style.height = input.scrollHeight + 'px';
-        //* copy blog from context แล้วเปลี่ยน title เป็นไปตามที่พิมพ์ลงไปใน textarea
+        //todo : copy blog from context แล้วเปลี่ยน title เป็นไปตามที่พิมพ์ลงไปใน textarea
         setBlog({ ...blog , title:input.value });
     };
 

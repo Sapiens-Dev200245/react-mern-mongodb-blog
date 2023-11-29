@@ -1,15 +1,16 @@
-import AnimationWrapper from "../common/page-animation";
+import AnimationWrapper from "../../common/page-animation";
 import { Link } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { useContext } from "react";
-import { UserContext } from "../App";
-import { removeFromSession } from "../common/session";
+import { UserContext } from "../../App";
+import { removeFromSession } from "../../common/session";
+import {toast} from 'react-hot-toast';
 const UserNavigationPanel = () => {
     const {userAuth , setUserAuth} = useContext(UserContext);
     const signOutUser = () => {
+        toast.success("User has been signed out");
         removeFromSession("user");
-        setUserAuth({access_token : null})
-
+        setUserAuth({access_token : null});
     }
     return (
         <AnimationWrapper

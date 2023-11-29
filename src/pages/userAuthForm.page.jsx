@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import InputBox from "../components/input.component";
+import InputBox from "../components/auth/input.component";
 import googleIcon from "../imgs/google.png";
 import AnimationWrapper from "../common/page-animation";
 import { useContext, useRef, useState } from "react";
@@ -56,6 +56,7 @@ const UserAuthForm = ({ type }) => {
       const rs = await axios.post('http://localhost:3000' + serverRoute , 
         formData
       )
+      toast.success("Login Success");
       StoreInSession("user" ,JSON.stringify(rs.data));
       setUserAuth(rs.data);
 

@@ -1,19 +1,25 @@
-import { Link, Outlet } from "react-router-dom";
-import logo from "../imgs/logo.png";
+import { Link, Outlet ,useNavigate} from "react-router-dom";
+import logo from "../../imgs/logo.png";
 import { CiSearch } from "react-icons/ci";
 import { useContext, useState } from "react";
 import { FiEdit } from "react-icons/fi";
-import { UserContext } from "../App";
+import { UserContext } from "../../App";
 import { FaRegBell } from "react-icons/fa";
 import UserNavigationPanel from "./user-navigation.component";
-
 
 const Navbar = () => {
   const [search, setSearch] = useState(false);
   const [userNavPanel , setUserNavPanel ] = useState(false);
-
+  const navigate = useNavigate();
   const {userAuth } = useContext(UserContext);
-  console.log(userAuth)
+
+  const handleSearch = (e) => {
+    let query = e.target.value;
+    if(e.keyCode === 13 && query.length){
+      navigate(`/search/${query}`);
+      e.target.value = '';
+    }
+  }
   return (
     <>
       <nav className="navbar ">
@@ -27,6 +33,7 @@ const Navbar = () => {
           } `}
         >
           <input
+            onKeyDown={handleSearch}
             type="text"
             placeholder="Search"
             className="w-full md:w-auto bg-grey p-4 pl-6 pr-[12%] md:pr-6  rounded-full placeholder:text-dark-grey"

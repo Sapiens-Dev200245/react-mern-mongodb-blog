@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { IoClose } from "react-icons/io5";
-import { EditorContext } from "../pages/editor.pages";
+import { EditorContext } from "../../pages/editor.pages";
 import {toast} from 'react-hot-toast'
 const Tag = ({tag , tagIndex}) => {
     let {blog, setBlog} = useContext(EditorContext);
